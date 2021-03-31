@@ -9,7 +9,7 @@ The variant type class here is made for containing all offenly used option types
 - Save & retrive variant type data
 - Provides python-like interface when saving & retriving data
 - Being saved & being retrived data should have the same type (o/w throw exception)
-- Can put as STL Containers' Template Parameter
+- Can be put as STL Containers' Template Parameter
 - Provides move constructors and assignment
 
 ## Install

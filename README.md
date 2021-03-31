@@ -20,5 +20,9 @@ The variant type class here is made for containing all offenly used option types
 - Fundumental types are implemented with C++ UNION
 - STL types as member variables. 
 
+## How to Use
+1. Option save
+2. Option retrieve
+
 ## Limit
 - No enough test cases

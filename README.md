@@ -10,7 +10,7 @@ For implementing these operation in the C++ programming language, it is needed t
 - Save & retrive various typed data with one class type
 - Provides python-like interface where the type of the object is determined implicitly
 - Being saved & being retrived data should have the same type (o/w throw exception)
-- Can be put as STL Containers' Template Parameter
+- Can be used as STL Template Parameter
 - Provides move constructors and assignment
 
 ## Install

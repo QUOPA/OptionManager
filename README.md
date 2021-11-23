@@ -69,7 +69,6 @@ std::vector<COptMap> tmpLayerOpt = NetOpt["layer"]    // Option map about layers
 - Download .h, .cpp files and include OptMap.h
 
 ## Implementation
-std::variant (C++20), traditional variant classes (such as OLE). However, it was needed to  develop my program in ~ C++14 environment, so cannot use std::variant, and I want the variant class contain STL containers like std::map or std::vector in addition to c++ funumantal types. <br>
 The variant type class here is made for containing all offenly used option types such as fundamental types like char, unsigned char, int, ... and STL classes like std::string, std::map, std::vector. Saving STL class-type option values, we can more set option values diversely.
 - Fundumental types are implemented using C++ UNION
 - STL types as member pointer variables. 

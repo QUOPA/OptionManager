@@ -1,8 +1,12 @@
 #include <iostream>
+#include "OptionElementTestSuite.h"
+
 
 int main()
 {
-	std::cout << "Hello World! " << std::endl;
+	REGISTERTESTSUITE(OptElemTest)
+
+
 
 	return 0;
 }

@@ -15,18 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="COptMap.cpp">
+    <ClCompile Include="OptionMap.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="OptionManager.cpp">
+    <ClCompile Include="OptionElement.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="COptMap.h">
+    <ClInclude Include="OptionMap.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="OptionManager.h">
+    <ClInclude Include="OptionElement.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionTypes.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

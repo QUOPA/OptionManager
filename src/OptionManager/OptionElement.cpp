@@ -1,4 +1,4 @@
-#include "OptionManager.h"
+#include "OptionElement.h"
 
 
 
@@ -40,7 +40,7 @@ COptionElem & COptionElem::operator=(COptionElem && rhs)
 	return *this;
 }
 
-std::string COptionElem::type()
+std::string COptionElem::typestr() const
 {
 	std::string retstr;
 	switch (_opType)
@@ -72,6 +72,8 @@ std::string COptionElem::type()
 	case _VT_MAP:
 		retstr = "map";
 		break;
+	default :
+		retstr = "undefined";
 	}
 	return retstr;
 }
@@ -87,11 +89,11 @@ COptionElem::operator COptMap() const { return GetMap(); }	//Converter
 
 // Assingment
 COptionElem& COptionElem::operator=(const COptMap & rhs) { SetMap(rhs); return *this; }
-//inline COptionElem& COptionElem::operator=(COptMap && rhs) { SetMap(std::move(rhs)); return *this; }
+COptionElem& COptionElem::operator=(COptMap && rhs) { SetMap(std::move(rhs)); return *this; }
 
 //Setter
 void COptionElem::SetMap(const COptMap& rhs) { deleteDynMemoryIfExist(); _opType = _VT_MAP; _vtOpt._pmap = new COptMap(rhs); }
-inline void COptionElem::SetMap(COptMap && rhs) { _opType = _VT_MAP, _map = std::move(rhs); }
+void COptionElem::SetMap(COptMap && rhs) { deleteDynMemoryIfExist(); _opType = _VT_MAP; _vtOpt._pmap = new COptMap(std::move(rhs)); }
 
 // Getter
 COptMap & COptionElem::GetMap() { assert(_opType == _VT_MAP); return *_vtOpt._pmap; }
@@ -101,56 +103,56 @@ COptionElem & COptionElem::at(const std::string & keystr)
 {
 	if (_opType != _VT_MAP)
 		throw std::out_of_range("COptionElem's type is not a map but at(const std::string &) is called");
-	return _pmap->at(keystr); 
+	return _vtOpt._pmap->at(keystr);
 }
 
-COptionElem COptionElem::at(const std::string & keystr) const
+const COptionElem & COptionElem::at(const std::string & keystr) const
 {
 	if (_opType != _VT_MAP)
 		throw std::out_of_range("COptionElem's type is not a map but at (const std::string &) const is called");
-	return _pmap->at(keystr); 
+	return _vtOpt._pmap->at(keystr);
 }
 
 COptionElem & COptionElem::operator[](const std::string & keystr)
 {
 	if (_opType != _VT_MAP)
 		throw std::out_of_range("COptionElem's type is not a map but operator[] (const std::string &) is called");
-	return _pmap->operator[](keystr); 
+	return _vtOpt._pmap->operator[](keystr);
 }
 
-COptionElem & COptionElem::operator[](std::string && keystr)
+const COptionElem & COptionElem::operator[](const std::string& keystr) const
 {
 	if (_opType != _VT_MAP)
 		throw std::out_of_range("COptionElem's type is not a map but operator[] (std::string &&) is called");
-	return _pmap->operator[](std::move(keystr)); 
+	return _vtOpt._pmap->operator[](keystr);
 }
 
 COptionElem & COptionElem::at(size_t idx)
 {
 	if (_opType != _VT_VEC)
 		throw std::out_of_range("COptionElem's type is not a vector but at(size_t) is called");
-	return _vec.at(idx); 
+	return _vtOpt._pvec->at(idx);
 }
 
-COptionElem COptionElem::at(size_t idx) const
+const COptionElem & COptionElem::at(size_t idx) const
 {
 	if (_opType != _VT_VEC)
 		throw std::out_of_range("COptionElem's type is not a vector but at(size_t) const is called");
-	return _vec.at(idx); 
+	return _vtOpt._pvec->at(idx);
 }
 
 COptionElem & COptionElem::operator[](size_t idx)
 {
 	if (_opType != _VT_VEC)
 		throw std::out_of_range("COptionElem's type is not a vector but operator[] (size_t) is called");
-	return _vec[idx]; 
+	return _vtOpt._pvec->operator[](idx);
 }
 
-COptionElem COptionElem::operator[](size_t idx) const
+const COptionElem & COptionElem::operator[](size_t idx) const
 {
 	if (_opType != _VT_VEC)
 		throw std::out_of_range("COptionElem's type is not a vector but operator[] (size_t) const is called");
-	return _vec[idx]; 
+	return _vtOpt._pvec->operator[](idx);
 }
 
 void COptionElem::CopyNonMoves(const COptionElem & rhs)
@@ -200,3 +202,42 @@ void COptionElem::deleteDynMemoryIfExist()
 
 }
 
+
+std::ostream& operator<<(std::ostream& os, const COptionElem& Opt)
+{
+	os << "(" << Opt.typestr() << ")";
+
+	std::string retstr;
+	switch (Opt.type())
+	{
+	case COptionElem::_VT_I:
+		if (Opt.isunsigned())
+			os << Opt._vtOpt._ul;
+		else
+			os << Opt._vtOpt._l;
+		break;
+	case COptionElem::_VT_F:
+		os << Opt._vtOpt._f;
+		break;
+	case COptionElem::_VT_C:
+		if (Opt.isunsigned())
+			os << Opt._vtOpt._uc;
+		else
+			os << Opt._vtOpt._c;
+		break;
+	case COptionElem::_VT_B:
+		os << Opt._vtOpt._b;
+		break;
+	case COptionElem::_VT_STR:
+		os << *Opt._vtOpt._pstr;
+		break;
+	case COptionElem::_VT_VEC:
+		break;
+	case COptionElem::_VT_MAP:
+		break;
+	default:
+		break;
+	}
+
+	return os;
+}

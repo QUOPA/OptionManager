@@ -3,7 +3,7 @@
 /*!
  * 여러 타입의 데이터를 공통된 인터페이스로 Set/Get할 수 있는 COptimElem Class와
  * COptimElem Class를 Map형태로 사용할 수 있는 COptMap을 지원함.
- * Version 0.2.0
+ * Version 0.3.0
  */ 
 
 
@@ -14,8 +14,10 @@
 #include <algorithm>
 #include <cassert>
 #include <exception>
+#include <iostream>
 
-#include "COptMap.h"
+#include "OptionMap.h"
+#include "OptionTypes.h"
 
 // unsigned <-> signed implicit은 허용한다. 
 
@@ -75,7 +77,20 @@ class COptMap;
 class COptionElem
 {
 public:
-	
+	enum OpType
+	{
+		_UNINITIALIZED = 0,
+		_VT_I = 1,
+		_VT_F = 2,
+		_VT_C = 3,
+		_VT_B = 4,
+
+		_VT_STR = 5,
+		_VT_VEC = 6,
+		_VT_MAP = 7
+	};
+
+
 	// Uninitialized Default
 	COptionElem() : _opType(_UNINITIALIZED), _bUnsign(false) {}
 
@@ -86,7 +101,7 @@ public:
 	COptionElem & operator=(const COptionElem & rhs);
 	COptionElem & operator=(COptionElem && rhs);
 
-	virtual ~COptionElem() {}
+	virtual ~COptionElem() { deleteDynMemoryIfExist(); }
 
 
 	// Integers
@@ -193,7 +208,7 @@ public:
 	operator std::vector<COptionElem>() const { return GetVector(); }	//Converter
 	
 	template<typename T>
-	operator std::vector<T>() const { return GetVector<T>(); }
+	operator std::vector<T>() const { return GetVectorWithType<T>(); }
 	
 	// Assingment
 	COptionElem& operator=(const std::vector<COptionElem> & vec) { SetVector(vec); return *this; }
@@ -253,7 +268,7 @@ public:
 	{
 		assert(_opType == _VT_VEC);
 		std::vector<T> vecTmp;
-		int vecSize = _vec.size();
+		int vecSize = _vtOpt._pvec->size();
 
 		vecTmp.resize(vecSize);
 		for (int i = 0; i < vecSize; i++)
@@ -266,8 +281,10 @@ public:
 		return vecTmp;
 	}
 
-	std::string type();
-	
+	std::string typestr() const ;
+	OpType type() const { return _opType; }
+	bool isunsigned() const { return _bUnsign; }
+
 	// --- Map Type ---
 	// Ctors
 	
@@ -281,44 +298,46 @@ public:
 	// Converter
 	operator COptMap() const;	//Converter
 	
-	template<typename T>
-	operator std::map<std::string, T>() const;
+// 	template<typename T>
+// 	operator std::map<std::string, T>() const;
 	
 	// Assingment
 	
 	COptionElem& operator=(const COptMap & rhs);
-	//COptionElem& operator=(COptMap && rhs);
+	COptionElem& operator=(COptMap&& rhs);
 	
 	template<typename T>
 	COptionElem& operator=(const std::map<std::string, T> & rhs);
 	
 	//Setter
 	void SetMap(const COptMap & rhs);
-	//void SetMap(COptMap && rhs);
+	void SetMap(COptMap&& rhs);
+
 	template <typename T>
 	void SetMap(const std::map<std::string, T> & rhs);
 	
 	// Getter
 	COptMap & GetMap();
 	const COptMap & GetMap() const;
-	template<typename T>
-	std::map<std::string, T> GetMap() const;
+
+// 	template<typename T>
+// 	std::map<std::string, T> GetMapWithType() const;
 
 
 	// for map
 
 	COptionElem & at(const std::string & keyval);
-	COptionElem at(const std::string & keyval) const;
+	const COptionElem & at(const std::string & keyval) const;
 
 	COptionElem & operator[] (const std::string & keyval);
-	COptionElem & operator[] (std::string && keyval);
+	const COptionElem& operator[] (const std::string & keyval) const;
 
 	// for vector
 	COptionElem & at(size_t idx);
-	COptionElem at(size_t idx) const;
+	const COptionElem& at(size_t idx) const;
 
 	COptionElem & operator[] (size_t idx);
-	COptionElem operator[] (size_t idx) const;
+	const COptionElem& operator[] (size_t idx) const;
 
 private:
 
@@ -326,19 +345,7 @@ private:
 
 	void deleteDynMemoryIfExist();
 
-	enum OpType
-	{
-
-		_UNINITIALIZED = 0,
-		_VT_I = 1,
-		_VT_F = 2,
-		_VT_C = 3,
-		_VT_B = 4,
-
-		_VT_STR = 5,
-		_VT_VEC = 6,
-		_VT_MAP = 7
-	} _opType;
+	OpType _opType;
 	
 	bool _bUnsign;
 
@@ -373,47 +380,48 @@ private:
 		COptMap* _pmap;
 		
 	} _vtOpt;
+
+	friend std::ostream& operator<<(std::ostream& os, const COptionElem& Opt);
 };
 
 template<typename T>
 inline COptionElem::COptionElem(const std::map<std::string, T> & rhs) { SetMap<T>(rhs);  }
 
-template<typename T>
-COptionElem::operator std::map<std::string, T>() const { return GetMap<T>(); }
+// template<typename T>
+// COptionElem::operator std::map<std::string, T>() const { return GetMapWithType<T>(); }
 
 template<typename T>
 COptionElem& COptionElem::operator=(const std::map<std::string, T> & rhs) { SetMap<T>(rhs); return *this; }
 
 template <typename T>
-void COptionElem::SetMap(const std::map<std::string, T> & rhs)
+void COptionElem::SetMap(const std::map<std::string, T>& rhs)
 {
+	deleteDynMemoryIfExist();
 	_opType = _VT_MAP;
-	int vecSize = rhs.size();
-	_pmap->resize(vecSize);
-	for (int i = 0; i < vecSize; i++)
-	{
-		_pmap->operator[](i).first = rhs.at(i).first;
-		_pmap->operator[](i).second = rhs.at(i).second;
-	}
+	_vtOpt._pmap = new COptMap(rhs);
 }
+ 
+// template<typename T>
+// std::map<std::string, T> COptionElem::GetMapWithType() const
+// {
+// 	assert(_opType == _VT_MAP);
+// 	std::map<std::string, T> mapTmp;
+// 	
+// 	auto it = _vtOpt._pmap->_optmap.begin();
+// 	auto itEnd = _vtOpt._pmap->_optmap.end();
+// 
+// 	for (; it != itEnd; ++it)
+// 	{
+// 		// OptMap can be implicetly converted to the map with value type that COptionElem object could be implicitly converted.
+// 		// When we want to return map with value type of ENUM, there is no direct way to convert OptMap into std::map<std::string, ENUM>.
+// 		// rather OptMap -> std::map<std::string, int> -> std::map<std::string, ENUM>.
+// 		
+// 		
+// 		mapTmp[it->first] = _pmap->at(i).first;
+// 		mapTmp[i].second = static_cast<T>(_pmap->at(i).second);
+// 	}
+// 	return mapTmp;
+// }
 
-template<typename T>
-std::map<std::string, T> COptionElem::GetMap() const
-{
-	assert(_opType == _VT_MAP);
-	std::map<std::string, T> mapTmp;
-	int vecSize = _pmap->size();
-
-	mapTmp.resize(vecSize);
-	for (int i = 0; i < vecSize; i++)
-	{
-		// Vector에 들어있는 COptionElem 클래스가 implicit converting할 수 있는 Type으로만 변환될 수 있습니다.
-		// 특히 enum A에 대한 vector를 return하고자할 경우, 개발자는 COptionElem -> int -> A로의 타입 변환이라고 생각하지만
-		// 컴파일러에서는 COptionElem --> A로의 변환이 정의되어있지 않기 때문에 int가 중간에 들어가는지 전혀 알 수 없습니다. 
-		// 따라서, C++ 표준에서 이렇게 두번의 implicit conversion은 제공하지 않으며, 아래 구문에서 에러 발생 시 해당 사항을 체크하시기 바랍니다.
-		mapTmp[i].first = _pmap->at(i).first;
-		mapTmp[i].second = static_cast<T>(_pmap->at(i).second);
-	}
-	return mapTmp;
-}
+std::ostream& operator<<(std::ostream& os, const COptionElem& Opt);
 

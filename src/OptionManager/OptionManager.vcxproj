@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{E5E16B1D-2FF2-47BC-870B-A999CBEB51F5}</ProjectGuid>
     <RootNamespace>OptionManager</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -127,12 +127,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="COptMap.cpp" />
-    <ClCompile Include="OptionManager.cpp" />
+    <ClCompile Include="OptionMap.cpp" />
+    <ClCompile Include="OptionElement.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="COptMap.h" />
-    <ClInclude Include="OptionManager.h" />
+    <ClInclude Include="OptionMap.h" />
+    <ClInclude Include="OptionElement.h" />
+    <ClInclude Include="OptionTypes.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

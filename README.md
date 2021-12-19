@@ -1,6 +1,6 @@
-# Option Manager
+# Varient-Type Option Map
 
-## Save & Retrieve Various Typed Values  
+## Save & Retrieve Varient-Type Values by std::map interface.
 - **Saving values** <br>
 An object can save value of int, double, char, vector<T>, map<key,T> or etc., just using '=' operator like python.
 ```cpp 

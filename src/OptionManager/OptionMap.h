@@ -24,7 +24,7 @@ public:
 	{
 		_optmap.clear();
 		auto it = rhs.begin();
-		auto itEnd = rhs.begin();
+		auto itEnd = rhs.end();
 
 		for (; it != itEnd; ++it)
 		{
@@ -67,6 +67,10 @@ public:
 	void Clear() { _optmap.clear(); };
 
 	size_t Size() { return _optmap.size(); };
+
+	std::vector<std::string> GetKeyVector();
+	std::vector<COptionElem> GetValVector();
+	std::pair <std::vector<std::string>, std::vector<COptionElem> > GetKeyValVectors();
 
 	std::map <std::string, COptionElem>::iterator Begin() { return _optmap.begin(); }
 	std::map <std::string, COptionElem>::iterator End() { return _optmap.end(); }

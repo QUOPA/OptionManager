@@ -127,33 +127,33 @@ const COptionElem & COptionElem::operator[](const std::string& keystr) const
 	return _vtOpt._pmap->operator[](keystr);
 }
 
-COptionElem & COptionElem::at(size_t idx)
-{
-	if (_opType != _VT_VEC)
-		throw std::out_of_range("COptionElem's type is not a vector but at(size_t) is called");
-	return _vtOpt._pvec->at(idx);
-}
-
-const COptionElem & COptionElem::at(size_t idx) const
-{
-	if (_opType != _VT_VEC)
-		throw std::out_of_range("COptionElem's type is not a vector but at(size_t) const is called");
-	return _vtOpt._pvec->at(idx);
-}
-
-COptionElem & COptionElem::operator[](size_t idx)
-{
-	if (_opType != _VT_VEC)
-		throw std::out_of_range("COptionElem's type is not a vector but operator[] (size_t) is called");
-	return _vtOpt._pvec->operator[](idx);
-}
-
-const COptionElem & COptionElem::operator[](size_t idx) const
-{
-	if (_opType != _VT_VEC)
-		throw std::out_of_range("COptionElem's type is not a vector but operator[] (size_t) const is called");
-	return _vtOpt._pvec->operator[](idx);
-}
+// COptionElem & COptionElem::at(size_t idx)
+// {
+// 	if (_opType != _VT_VEC)
+// 		throw std::out_of_range("COptionElem's type is not a vector but at(size_t) is called");
+// 	return _vtOpt._pvec->at(idx);
+// }
+// 
+// const COptionElem & COptionElem::at(size_t idx) const
+// {
+// 	if (_opType != _VT_VEC)
+// 		throw std::out_of_range("COptionElem's type is not a vector but at(size_t) const is called");
+// 	return _vtOpt._pvec->at(idx);
+// }
+// 
+// COptionElem & COptionElem::operator[](size_t idx)
+// {
+// 	if (_opType != _VT_VEC)
+// 		throw std::out_of_range("COptionElem's type is not a vector but operator[] (size_t) is called");
+// 	return _vtOpt._pvec->operator[](idx);
+// }
+// 
+// const COptionElem & COptionElem::operator[](size_t idx) const
+// {
+// 	if (_opType != _VT_VEC)
+// 		throw std::out_of_range("COptionElem's type is not a vector but operator[] (size_t) const is called");
+// 	return _vtOpt._pvec->operator[](idx);
+// }
 
 void COptionElem::CopyNonMoves(const COptionElem & rhs)
 {
@@ -232,8 +232,10 @@ std::ostream& operator<<(std::ostream& os, const COptionElem& Opt)
 		os << *Opt._vtOpt._pstr;
 		break;
 	case COptionElem::_VT_VEC:
+		PrintVector(os, *Opt._vtOpt._pvec);
 		break;
 	case COptionElem::_VT_MAP:
+		PrintVector(os, Opt._vtOpt._pmap->GetKeyVector());
 		break;
 	default:
 		break;

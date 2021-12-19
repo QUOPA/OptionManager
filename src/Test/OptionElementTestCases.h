@@ -1,6 +1,7 @@
 #pragma once
 
 #include "OptionManager/OptionElement.h"
+#include "OptionManager/OptionUtilFns.h"
 #include <iostream>
 #include <vector>
 #include <map>
@@ -116,11 +117,12 @@ void VectorTypeTest()
 	std::vector<int> tmpvec(10, 3);
 	COptionElem Opt(tmpvec);
 	std::cout << Opt << std::endl;
+	Opt.GetVector()[1] = 1.4;
+	std::cout << Opt << std::endl;
 	Opt = tmpvec;
 	std::cout << Opt << std::endl;
-
 	std::vector<int> b = Opt;
-	std::cout << b.size() << std::endl;
+	PrintVector(std::cout, b);
 }
 
 
@@ -129,10 +131,15 @@ void MapTypeTest()
 	std::map<std::string, int> tmpmap ={ {"abc", 1}, {"def", 2} };
 	COptionElem Opt(tmpmap);
 	std::cout << Opt << std::endl;
+	Opt["a"] = 1.3;
+	Opt["added2"] = 1.3;
+	std::cout << Opt << std::endl;
+	std::cout << Opt["added2"] << std::endl;
+	std::cout << Opt["a"] << std::endl;
+	std::cout << Opt["abc"] << std::endl;
 	
 	Opt = tmpmap;
 	std::cout << Opt << std::endl;
-
 }
 
 

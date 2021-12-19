@@ -18,6 +18,7 @@
 
 #include "OptionMap.h"
 #include "OptionTypes.h"
+#include "OptionUtilFns.h"
 
 // unsigned <-> signed implicit은 허용한다. 
 
@@ -95,130 +96,130 @@ public:
 	COptionElem() : _opType(_UNINITIALIZED), _bUnsign(false) {}
 
 	// Copy & move Ctor, Assignment, Dtor
-	COptionElem(const COptionElem & rhs) { *this = rhs; }
-	COptionElem(COptionElem && rhs) { *this = std::move(rhs); }
+	COptionElem(const COptionElem& rhs) { *this = rhs; }
+	COptionElem(COptionElem&& rhs) { *this = std::move(rhs); }
 
-	COptionElem & operator=(const COptionElem & rhs);
-	COptionElem & operator=(COptionElem && rhs);
+	COptionElem& operator=(const COptionElem& rhs);
+	COptionElem& operator=(COptionElem&& rhs);
 
 	virtual ~COptionElem() { deleteDynMemoryIfExist(); }
 
 
 	// Integers
 	_GEN_COPT_IN_OUT_PAIR_IType(int)
-	_GEN_COPT_IN_OUT_PAIR_IType(long)
-	_GEN_COPT_IN_OUT_PAIR_IType(long long)
-	_GEN_COPT_IN_OUT_PAIR_IType(short)	
-	Itype & GetInt() { assert(_opType == _VT_I);  return _vtOpt._l; }
-	const Itype & GetInt() const { assert(_opType == _VT_I);  return _vtOpt._l; }
+		_GEN_COPT_IN_OUT_PAIR_IType(long)
+		_GEN_COPT_IN_OUT_PAIR_IType(long long)
+		_GEN_COPT_IN_OUT_PAIR_IType(short)
+		Itype& GetInt() { assert(_opType == _VT_I);  return _vtOpt._l; }
+	const Itype& GetInt() const { assert(_opType == _VT_I);  return _vtOpt._l; }
 
 	// Unsigned Integers
 	_GEN_COPT_IN_OUT_PAIR_UIType(unsigned int)
-	_GEN_COPT_IN_OUT_PAIR_UIType(unsigned long)
-	_GEN_COPT_IN_OUT_PAIR_UIType(unsigned long long)
-	_GEN_COPT_IN_OUT_PAIR_UIType(unsigned short)
-	U_Itype & GetUInt() { assert(_opType == _VT_I);  return _vtOpt._ul; }
-	const U_Itype & GetUInt() const { assert(_opType == _VT_I);  return _vtOpt._ul; }
+		_GEN_COPT_IN_OUT_PAIR_UIType(unsigned long)
+		_GEN_COPT_IN_OUT_PAIR_UIType(unsigned long long)
+		_GEN_COPT_IN_OUT_PAIR_UIType(unsigned short)
+		U_Itype& GetUInt() { assert(_opType == _VT_I);  return _vtOpt._ul; }
+	const U_Itype& GetUInt() const { assert(_opType == _VT_I);  return _vtOpt._ul; }
 
 	// Floating Types
 	_GEN_COPT_IN_OUT_PAIR_FType(float)
-	_GEN_COPT_IN_OUT_PAIR_FType(double)
-	Ftype & GetFloat() { assert(_opType == _VT_F);  return _vtOpt._f; }
-	const Ftype & GetFloat() const { assert(_opType == _VT_F);  return _vtOpt._f; }
+		_GEN_COPT_IN_OUT_PAIR_FType(double)
+		Ftype& GetFloat() { assert(_opType == _VT_F);  return _vtOpt._f; }
+	const Ftype& GetFloat() const { assert(_opType == _VT_F);  return _vtOpt._f; }
 
 	// Char Types
 	_GEN_COPT_IN_OUT_PAIR_CType(char)
-	Chtype & GetChar() { assert(_opType == _VT_C);  return _vtOpt._c; }
-	const Chtype & GetChar() const { assert(_opType == _VT_C);  return _vtOpt._c; }
+		Chtype& GetChar() { assert(_opType == _VT_C);  return _vtOpt._c; }
+	const Chtype& GetChar() const { assert(_opType == _VT_C);  return _vtOpt._c; }
 
 	// Unsigned Char type
 	_GEN_COPT_IN_OUT_PAIR_UCType(unsigned char)
-	U_Chtype & GetUChar() { assert(_opType == _VT_C);  return _vtOpt._uc; }
-	const U_Chtype & GetUChar() const { assert(_opType == _VT_C);  return _vtOpt._uc; }
+		U_Chtype& GetUChar() { assert(_opType == _VT_C);  return _vtOpt._uc; }
+	const U_Chtype& GetUChar() const { assert(_opType == _VT_C);  return _vtOpt._uc; }
 
 	// Bool Type
 	_GEN_COPT_IN_OUT_PAIR_BType(bool)
-	Btype & GetBool() { assert(_opType == _VT_B);  return _vtOpt._b; }
-	const Btype & GetBool() const { assert(_opType == _VT_B);  return _vtOpt._b; }
+		Btype& GetBool() { assert(_opType == _VT_B);  return _vtOpt._b; }
+	const Btype& GetBool() const { assert(_opType == _VT_B);  return _vtOpt._b; }
 
 	// --- String Type ---
 	// CTor
 	// COptionElem(const char szStr []) : _opType(_VT_STR), _str(szStr) {}
 
-	COptionElem(const char * szStr) 
+	COptionElem(const char* szStr)
 		: _opType(_VT_STR), _vtOpt(new std::string(szStr)) {}
-	
-	COptionElem(const std::string & str) 
+
+	COptionElem(const std::string& str)
 		: _opType(_VT_STR), _vtOpt(new std::string(str)) {}
 
-	COptionElem(std::string && str)
+	COptionElem(std::string&& str)
 		: _opType(_VT_STR), _vtOpt(new std::string(std::move(str))) {}
 
 
 	// Convertor
-	operator std::string() const { return GetString(); }									
+	operator std::string() const { return GetString(); }
 	// Assinment
-	COptionElem& operator= (const char * szStr) { SetString(szStr); return *this; }
-	
-	COptionElem& operator= (const std::string & str) { SetString(str); return *this; }					
-	
-	COptionElem& operator= (std::string && str) { SetString(std::move(str)); return *this; }
-	
-	
+	COptionElem& operator= (const char* szStr) { SetString(szStr); return *this; }
+
+	COptionElem& operator= (const std::string& str) { SetString(str); return *this; }
+
+	COptionElem& operator= (std::string&& str) { SetString(std::move(str)); return *this; }
+
+
 	// Setter
-	void SetString(const char * szStr) 
-	{ 
+	void SetString(const char* szStr)
+	{
 		deleteDynMemoryIfExist();
 		_opType = _VT_STR;
 		_vtOpt._pstr = new std::string(szStr);
 	}
-	void SetString(const std::string & str) 
+	void SetString(const std::string& str)
 	{
 		deleteDynMemoryIfExist();
 		_opType = _VT_STR;
 		_vtOpt._pstr = new std::string(str);
 	}
-	void SetString(std::string && str) 
-	{ 
+	void SetString(std::string&& str)
+	{
 		deleteDynMemoryIfExist();
 		_opType = _VT_STR;
 		_vtOpt._pstr = new std::string(std::move(str));
 	}
-	
+
 	// Getter
-	std::string & GetString() { assert(_opType == _VT_STR); return *_vtOpt._pstr; }
-	const std::string & GetString() const { assert(_opType == _VT_STR); return *_vtOpt._pstr; }
-	
+	std::string& GetString() { assert(_opType == _VT_STR); return *_vtOpt._pstr; }
+	const std::string& GetString() const { assert(_opType == _VT_STR); return *_vtOpt._pstr; }
+
 	// --- Vector Type ---
 	// CTor
 	COptionElem(const std::vector<COptionElem>& vec)
 		: _opType(_VT_VEC), _vtOpt(new std::vector<COptionElem>(vec)) {}
-	COptionElem(std::vector<COptionElem> && vec) 
+	COptionElem(std::vector<COptionElem>&& vec)
 		: _opType(_VT_VEC), _vtOpt(new std::vector<COptionElem>(std::move(vec))) {}
-	
-	template<typename T>				
-	COptionElem(const std::vector<T> & vec) { SetVector<T>(vec); }
 
 	template<typename T>
-	COptionElem(std::vector<T> && vec) { SetVector<T>(vec); }
-	
+	COptionElem(const std::vector<T>& vec) { SetVector<T>(vec); }
+
+	template<typename T>
+	COptionElem(std::vector<T>&& vec) { SetVector<T>(vec); }
+
 
 
 	// Converter
 	operator std::vector<COptionElem>() const { return GetVector(); }	//Converter
-	
+
 	template<typename T>
 	operator std::vector<T>() const { return GetVectorWithType<T>(); }
-	
+
 	// Assingment
-	COptionElem& operator=(const std::vector<COptionElem> & vec) { SetVector(vec); return *this; }
-	COptionElem& operator=(std::vector<COptionElem> && vec) { SetVector(std::move(vec)); return *this; }
-	
+	COptionElem& operator=(const std::vector<COptionElem>& vec) { SetVector(vec); return *this; }
+	COptionElem& operator=(std::vector<COptionElem>&& vec) { SetVector(std::move(vec)); return *this; }
+
 	template<typename T>
-	COptionElem& operator=(const std::vector<T> & vec) { SetVector<T>(vec); return *this; }
+	COptionElem& operator=(const std::vector<T>& vec) { SetVector<T>(vec); return *this; }
 
 	// Setter
-	void SetVector(const std::vector<COptionElem> & vec ) 
+	void SetVector(const std::vector<COptionElem>& vec)
 	{
 		deleteDynMemoryIfExist();
 		_opType = _VT_VEC;
@@ -232,7 +233,7 @@ public:
 	}
 
 	template <typename TargetType, typename T>
-	void SetVectorWithType(const std::vector<T> & vec)		// for enums
+	void SetVectorWithType(const std::vector<T>& vec)		// for enums
 	{
 		deleteDynMemoryIfExist();
 		_opType = _VT_VEC;
@@ -246,7 +247,7 @@ public:
 	}
 
 	template <typename T>
-	void SetVector(const std::vector<T> & vec) 
+	void SetVector(const std::vector<T>& vec)
 	{
 		deleteDynMemoryIfExist();
 		_opType = _VT_VEC;
@@ -260,11 +261,11 @@ public:
 	}
 
 	// Getter
-	std::vector<COptionElem> & GetVector() { assert(_opType == _VT_VEC); return *_vtOpt._pvec; }
-	const std::vector<COptionElem> & GetVector() const { assert(_opType == _VT_VEC); return *_vtOpt._pvec; }
-	
+	std::vector<COptionElem>& GetVector() { assert(_opType == _VT_VEC); return *_vtOpt._pvec; }
+	const std::vector<COptionElem>& GetVector() const { assert(_opType == _VT_VEC); return *_vtOpt._pvec; }
+
 	template<typename T>
-	std::vector<T> GetVectorWithType() const 
+	std::vector<T> GetVectorWithType() const
 	{
 		assert(_opType == _VT_VEC);
 		std::vector<T> vecTmp;
@@ -281,65 +282,75 @@ public:
 		return vecTmp;
 	}
 
-	std::string typestr() const ;
+	std::string typestr() const;
 	OpType type() const { return _opType; }
 	bool isunsigned() const { return _bUnsign; }
 
 	// --- Map Type ---
 	// Ctors
-	
-	COptionElem(const COptMap & rhs);
-	COptionElem(COptMap && rhs);
+
+	COptionElem(const COptMap& rhs);
+	COptionElem(COptMap&& rhs);
 
 	template<typename T>
-	COptionElem(const std::map<std::string, T> & rhs);
-	
+	COptionElem(const std::map<std::string, T>& rhs);
+
 
 	// Converter
 	operator COptMap() const;	//Converter
-	
+
 // 	template<typename T>
 // 	operator std::map<std::string, T>() const;
-	
+
 	// Assingment
-	
-	COptionElem& operator=(const COptMap & rhs);
+
+	COptionElem& operator=(const COptMap& rhs);
 	COptionElem& operator=(COptMap&& rhs);
-	
+
 	template<typename T>
-	COptionElem& operator=(const std::map<std::string, T> & rhs);
-	
+	COptionElem& operator=(const std::map<std::string, T>& rhs);
+
 	//Setter
-	void SetMap(const COptMap & rhs);
+	void SetMap(const COptMap& rhs);
 	void SetMap(COptMap&& rhs);
 
 	template <typename T>
-	void SetMap(const std::map<std::string, T> & rhs);
-	
+	void SetMap(const std::map<std::string, T>& rhs);
+
 	// Getter
-	COptMap & GetMap();
-	const COptMap & GetMap() const;
+	COptMap& GetMap();
+	const COptMap& GetMap() const;
 
-// 	template<typename T>
-// 	std::map<std::string, T> GetMapWithType() const;
+	// 	template<typename T>
+	// 	std::map<std::string, T> GetMapWithType() const;
 
 
-	// for map
+		// for map
 
-	COptionElem & at(const std::string & keyval);
-	const COptionElem & at(const std::string & keyval) const;
+	COptionElem& at(const std::string& keyval);
+	const COptionElem& at(const std::string& keyval) const;
 
-	COptionElem & operator[] (const std::string & keyval);
-	const COptionElem& operator[] (const std::string & keyval) const;
+	COptionElem& operator[] (const std::string& keyval);
+	const COptionElem& operator[] (const std::string& keyval) const;
 
-	// for vector
-	COptionElem & at(size_t idx);
-	const COptionElem& at(size_t idx) const;
 
-	COptionElem & operator[] (size_t idx);
-	const COptionElem& operator[] (size_t idx) const;
+	COptionElem& operator[] (const char* keyval) { return this->operator[](std::string(keyval)); }
+	const COptionElem& operator[] (const char* keyval) const { return this->operator[](std::string(keyval)); }
+
+
+
+// 	// for vector
+// 	COptionElem& at(size_t idx);
+// 	const COptionElem& at(size_t idx) const;
+// 
+// 	COptionElem& operator[] (size_t idx);
+// 	const COptionElem& operator[] (size_t idx) const;
+
+
 
 private:
+
+
 
 	void CopyNonMoves(const COptionElem& rhs);
 
@@ -381,7 +392,7 @@ private:
 		
 	} _vtOpt;
 
-	friend std::ostream& operator<<(std::ostream& os, const COptionElem& Opt);
+	friend std::ostream & operator<<(std::ostream& os, const COptionElem& Opt);
 };
 
 template<typename T>

@@ -11,6 +11,55 @@ const COptionElem & COptMap::at(const std::string & keystr) const { return _optm
 
 bool COptMap::Exist(const std::string & keystr) const { return _optmap.count(keystr) > 0; }
 
+std::vector<std::string> COptMap::GetKeyVector()
+{
+    std::vector<std::string> retvec(_optmap.size());
+    auto it = _optmap.begin();
+    auto itEnd = _optmap.end();
+    int idx = 0;
+    for (; it != itEnd; ++it)
+    {
+        retvec[idx] = it->first;
+        ++idx;
+    }
+	return retvec;
+}
+
+
+std::vector<COptionElem> COptMap::GetValVector()
+{
+	std::vector<COptionElem> retvec(_optmap.size());
+	auto it = _optmap.begin();
+	auto itEnd = _optmap.end();
+	int idx = 0;
+	for (; it != itEnd; ++it)
+	{
+		retvec[idx] = it->second;
+		++idx;
+	}
+
+	return retvec;
+}
+
+
+std::pair<std::vector<std::string>, std::vector<COptionElem>> COptMap::GetKeyValVectors()
+{
+	std::vector<std::string> keyvec(_optmap.size());
+	std::vector<COptionElem> valvec(_optmap.size());
+	auto it = _optmap.begin();
+	auto itEnd = _optmap.end();
+	int idx = 0;
+	for (; it != itEnd; ++it)
+	{
+		keyvec[idx] = it->first;
+		valvec[idx] = it->second;
+		++idx;
+	}
+	return std::make_pair(keyvec, valvec);
+}
+
+
+
 Itype & COptMap::GetIntAt(const std::string & keystr) { return _optmap.at(keystr).GetInt(); }
 const Itype & COptMap::GetIntAt(const std::string & keystr) const { return _optmap.at(keystr).GetInt(); }
 

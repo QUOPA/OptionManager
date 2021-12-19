@@ -58,23 +58,22 @@ std::vector<COptMap> tmpLayerOpt = NetOpt["layer"]    // Option map about layers
 ...
 ```
 ## Features
-- Save & retrive various typed data with one class type
-- Provides python-like interface where the type of the object is determined implicitly
+- Save & retrive various typed data with one map object
+- Only requires C++11 (not C++17 for std::varient)
+- Provides python-like interface (an element has run-time type)
 - Being saved & being retrived data should have the same type (o/w throw exception)
-- Can be used as STL Template Parameter
-- Provides move constructors and assignment
+- STL Container Compatible
+- Provides move sementic
 
 ## Install
-- Requires C++11
 - Download .h, .cpp files and include OptMap.h
 
 ## Implementation
-The variant type class here is made for containing all offenly used option types such as fundamental types like char, unsigned char, int, ... and STL classes like std::string, std::map, std::vector. Saving STL class-type option values, we can more set option values diversely.
-- Fundumental types are implemented using C++ UNION
-- STL types as member pointer variables. 
-- The classes heavely employ converting constructors and converting operator().
+The variant type class is made to include all option types, offenly used, such as fundamental types like char, unsigned char, int, ... and STL classes, namely std::string, std::map, std::vector. Saving STL class-type option values, we can more set option values diversely.
+- Fundumental types and pointer to STL types are defined together as C++ UNION in the varient type element class.
+- Classes heavely employ converting constructors and converting operator().
 
-## Limits
-- No enough test cases
-- Slower assignment/retrieval than direct one because types are checked in runtime in both assignment and retrieval.
-- Additional memory allocated because non-basic type requires theire own member pointer variables, though the basic types shares the memery using union  
+## Working on...
+- Writting enough test cases
+- Performance improvement 
+- Serialize, Import from & Export to a format (JSON, XML, etc...)

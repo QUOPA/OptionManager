@@ -1,5 +1,5 @@
 #pragma once
-#include "OptionElementTestCases.h"
+#include "VariantElementTestCases.h"
 #include "TestUtils.h"
 
 namespace OptElemTest

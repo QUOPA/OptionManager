@@ -1,14 +1,14 @@
 #pragma once
 
 #include <map>
-#include "OptionElement.h"
+#include "VariantElement.h"
 #include "OptionTypes.h"
 
 
 
 using namespace OptTypes;
 
-class COptionElem;
+class CVariantElem;
 
 class COptMap
 {
@@ -53,11 +53,11 @@ public:
 
 
 	// element access
-	COptionElem & operator[] (const std::string & keystr);
-	const COptionElem & operator[] (const std::string& keystr) const;
+	CVariantElem & operator[] (const std::string & keystr);
+	const CVariantElem & operator[] (const std::string& keystr) const;
 
-	COptionElem & at(const std::string & keystr);
-	const COptionElem & at(const std::string & keystr) const;
+	CVariantElem & at(const std::string & keystr);
+	const CVariantElem & at(const std::string & keystr) const;
 
 	// other utility functions
 	bool Exist(const std::string& keystr) const;
@@ -69,14 +69,14 @@ public:
 	size_t Size() { return _optmap.size(); };
 
 	std::vector<std::string> GetKeyVector();
-	std::vector<COptionElem> GetValVector();
-	std::pair <std::vector<std::string>, std::vector<COptionElem> > GetKeyValVectors();
+	std::vector<CVariantElem> GetValVector();
+	std::pair <std::vector<std::string>, std::vector<CVariantElem> > GetKeyValVectors();
 
-	std::map <std::string, COptionElem>::iterator Begin() { return _optmap.begin(); }
-	std::map <std::string, COptionElem>::iterator End() { return _optmap.end(); }
+	std::map <std::string, CVariantElem>::iterator Begin() { return _optmap.begin(); }
+	std::map <std::string, CVariantElem>::iterator End() { return _optmap.end(); }
 
-	std::map <std::string, COptionElem>::const_iterator cBegin() { return _optmap.cbegin(); }
-	std::map <std::string, COptionElem>::const_iterator cEnd() { return _optmap.cend(); }
+	std::map <std::string, CVariantElem>::const_iterator cBegin() { return _optmap.cbegin(); }
+	std::map <std::string, CVariantElem>::const_iterator cEnd() { return _optmap.cend(); }
 
 	// to be updated : merge
 
@@ -103,8 +103,8 @@ public:
 	std::string & GetStringAt(const std::string & keystr);
 	const std::string & GetStringAt(const std::string & keystr) const;
 
-	std::vector<COptionElem> & GetVectorAt(const std::string & keystr);
-	const std::vector<COptionElem> & GetVectorAt(const std::string & keystr) const;
+	std::vector<CVariantElem> & GetVectorAt(const std::string & keystr);
+	const std::vector<CVariantElem> & GetVectorAt(const std::string & keystr) const;
 
 	COptMap & GetMapAt(const std::string & keystr);
 	const COptMap & GetMapAt(const std::string & keystr) const;
@@ -112,6 +112,6 @@ public:
 	virtual ~COptMap() {}
 
 private:
-	std::map <std::string, COptionElem> _optmap;
-	friend class COptionElem;
+	std::map <std::string, CVariantElem> _optmap;
+	friend class CVariantElem;
 };

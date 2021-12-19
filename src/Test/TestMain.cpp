@@ -1,5 +1,5 @@
 #include <iostream>
-#include "OptionElementTestSuite.h"
+#include "VariantElementTestSuite.h"
 
 
 int main()

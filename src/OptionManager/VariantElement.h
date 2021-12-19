@@ -22,12 +22,12 @@
 
 // unsigned <-> signed implicit은 허용한다. 
 
-//class COptionElem;
+//class CVariantElem;
 
 // 아래 Define 내용 Constructor, Detter, 
-#define _GEN_COPT_CTOR_(_T1, _T2, _TE, _UNSIG) COptionElem(_T1  i) : _opType(_TE), _bUnsign(_UNSIG), _vtOpt(static_cast<_T2>(i))  {}
+#define _GEN_COPT_CTOR_(_T1, _T2, _TE, _UNSIG) CVariantElem(_T1  i) : _opType(_TE), _bUnsign(_UNSIG), _vtOpt(static_cast<_T2>(i))  {}
 #define _GEN_COPT_CONVERTER_(_T1, _TE, _VT)  operator _T1() const { assert(_opType == _TE);  return static_cast<_T1>(_vtOpt._VT); }
-#define _GEN_COPT_ASSIGN_(_T1, _T2, _TE, _VT, _UNSIG) COptionElem & operator= (const _T1 & rhs) { deleteDynMemoryIfExist(); _opType = _TE; _bUnsign =_UNSIG ;  _vtOpt._VT = static_cast<_T2>(rhs); return *this; }
+#define _GEN_COPT_ASSIGN_(_T1, _T2, _TE, _VT, _UNSIG) CVariantElem & operator= (const _T1 & rhs) { deleteDynMemoryIfExist(); _opType = _TE; _bUnsign =_UNSIG ;  _vtOpt._VT = static_cast<_T2>(rhs); return *this; }
 
 // 아래 Define을 쓰면 생성되는 것들
 #define _GEN_COPT_CTOR_CONVERTER_ASSIGN_(_T1, _T2, _TE, _VT, _UNSIG) _GEN_COPT_CTOR_(_T1, _T2, _TE, _UNSIG) \
@@ -66,7 +66,7 @@ namespace OptTypes {
 }
 
 // 아래 정의된 Type에 대해서 사용할 수 있습니다. 
-// enum을 입 출력으로 사용하기 위해 int로 명시적으로 변환 후 입력하고, 명시적으로 COptionElem을 int로 변환 후 enum에 넣어주어야 합니다.
+// enum을 입 출력으로 사용하기 위해 int로 명시적으로 변환 후 입력하고, 명시적으로 CVariantElem을 int로 변환 후 enum에 넣어주어야 합니다.
 
 using namespace OptTypes;
 
@@ -75,7 +75,7 @@ using namespace OptTypes;
 
 class COptMap;
 
-class COptionElem
+class CVariantElem
 {
 public:
 	enum OpType
@@ -93,16 +93,16 @@ public:
 
 
 	// Uninitialized Default
-	COptionElem() : _opType(_UNINITIALIZED), _bUnsign(false) {}
+	CVariantElem() : _opType(_UNINITIALIZED), _bUnsign(false) {}
 
 	// Copy & move Ctor, Assignment, Dtor
-	COptionElem(const COptionElem& rhs) { *this = rhs; }
-	COptionElem(COptionElem&& rhs) { *this = std::move(rhs); }
+	CVariantElem(const CVariantElem& rhs) { *this = rhs; }
+	CVariantElem(CVariantElem&& rhs) { *this = std::move(rhs); }
 
-	COptionElem& operator=(const COptionElem& rhs);
-	COptionElem& operator=(COptionElem&& rhs);
+	CVariantElem& operator=(const CVariantElem& rhs);
+	CVariantElem& operator=(CVariantElem&& rhs);
 
-	virtual ~COptionElem() { deleteDynMemoryIfExist(); }
+	virtual ~CVariantElem() { deleteDynMemoryIfExist(); }
 
 
 	// Integers
@@ -144,26 +144,26 @@ public:
 
 	// --- String Type ---
 	// CTor
-	// COptionElem(const char szStr []) : _opType(_VT_STR), _str(szStr) {}
+	// CVariantElem(const char szStr []) : _opType(_VT_STR), _str(szStr) {}
 
-	COptionElem(const char* szStr)
+	CVariantElem(const char* szStr)
 		: _opType(_VT_STR), _vtOpt(new std::string(szStr)) {}
 
-	COptionElem(const std::string& str)
+	CVariantElem(const std::string& str)
 		: _opType(_VT_STR), _vtOpt(new std::string(str)) {}
 
-	COptionElem(std::string&& str)
+	CVariantElem(std::string&& str)
 		: _opType(_VT_STR), _vtOpt(new std::string(std::move(str))) {}
 
 
 	// Convertor
 	operator std::string() const { return GetString(); }
 	// Assinment
-	COptionElem& operator= (const char* szStr) { SetString(szStr); return *this; }
+	CVariantElem& operator= (const char* szStr) { SetString(szStr); return *this; }
 
-	COptionElem& operator= (const std::string& str) { SetString(str); return *this; }
+	CVariantElem& operator= (const std::string& str) { SetString(str); return *this; }
 
-	COptionElem& operator= (std::string&& str) { SetString(std::move(str)); return *this; }
+	CVariantElem& operator= (std::string&& str) { SetString(std::move(str)); return *this; }
 
 
 	// Setter
@@ -192,44 +192,44 @@ public:
 
 	// --- Vector Type ---
 	// CTor
-	COptionElem(const std::vector<COptionElem>& vec)
-		: _opType(_VT_VEC), _vtOpt(new std::vector<COptionElem>(vec)) {}
-	COptionElem(std::vector<COptionElem>&& vec)
-		: _opType(_VT_VEC), _vtOpt(new std::vector<COptionElem>(std::move(vec))) {}
+	CVariantElem(const std::vector<CVariantElem>& vec)
+		: _opType(_VT_VEC), _vtOpt(new std::vector<CVariantElem>(vec)) {}
+	CVariantElem(std::vector<CVariantElem>&& vec)
+		: _opType(_VT_VEC), _vtOpt(new std::vector<CVariantElem>(std::move(vec))) {}
 
 	template<typename T>
-	COptionElem(const std::vector<T>& vec) { SetVector<T>(vec); }
+	CVariantElem(const std::vector<T>& vec) { SetVector<T>(vec); }
 
 	template<typename T>
-	COptionElem(std::vector<T>&& vec) { SetVector<T>(vec); }
+	CVariantElem(std::vector<T>&& vec) { SetVector<T>(vec); }
 
 
 
 	// Converter
-	operator std::vector<COptionElem>() const { return GetVector(); }	//Converter
+	operator std::vector<CVariantElem>() const { return GetVector(); }	//Converter
 
 	template<typename T>
 	operator std::vector<T>() const { return GetVectorWithType<T>(); }
 
 	// Assingment
-	COptionElem& operator=(const std::vector<COptionElem>& vec) { SetVector(vec); return *this; }
-	COptionElem& operator=(std::vector<COptionElem>&& vec) { SetVector(std::move(vec)); return *this; }
+	CVariantElem& operator=(const std::vector<CVariantElem>& vec) { SetVector(vec); return *this; }
+	CVariantElem& operator=(std::vector<CVariantElem>&& vec) { SetVector(std::move(vec)); return *this; }
 
 	template<typename T>
-	COptionElem& operator=(const std::vector<T>& vec) { SetVector<T>(vec); return *this; }
+	CVariantElem& operator=(const std::vector<T>& vec) { SetVector<T>(vec); return *this; }
 
 	// Setter
-	void SetVector(const std::vector<COptionElem>& vec)
+	void SetVector(const std::vector<CVariantElem>& vec)
 	{
 		deleteDynMemoryIfExist();
 		_opType = _VT_VEC;
-		_vtOpt._pvec = new std::vector<COptionElem>(vec);
+		_vtOpt._pvec = new std::vector<CVariantElem>(vec);
 	}
-	void SetVector(std::vector<COptionElem>&& vec)
+	void SetVector(std::vector<CVariantElem>&& vec)
 	{
 		deleteDynMemoryIfExist();
 		_opType = _VT_VEC;
-		_vtOpt._pvec = new std::vector<COptionElem>(std::move(vec));
+		_vtOpt._pvec = new std::vector<CVariantElem>(std::move(vec));
 	}
 
 	template <typename TargetType, typename T>
@@ -239,7 +239,7 @@ public:
 		_opType = _VT_VEC;
 		int vecSize = vec.size();
 
-		_vtOpt._pvec = new std::vector<COptionElem>(vecSize);
+		_vtOpt._pvec = new std::vector<CVariantElem>(vecSize);
 		for (int i = 0; i < vecSize; i++)
 		{
 			_vtOpt._pvec->operator[](i) = static_cast<TargetType>(vec[i]);
@@ -253,7 +253,7 @@ public:
 		_opType = _VT_VEC;
 		int vecSize = vec.size();
 
-		_vtOpt._pvec = new std::vector<COptionElem>(vecSize);
+		_vtOpt._pvec = new std::vector<CVariantElem>(vecSize);
 		for (int i = 0; i < vecSize; i++)
 		{
 			_vtOpt._pvec->operator[](i) = vec[i];
@@ -261,8 +261,8 @@ public:
 	}
 
 	// Getter
-	std::vector<COptionElem>& GetVector() { assert(_opType == _VT_VEC); return *_vtOpt._pvec; }
-	const std::vector<COptionElem>& GetVector() const { assert(_opType == _VT_VEC); return *_vtOpt._pvec; }
+	std::vector<CVariantElem>& GetVector() { assert(_opType == _VT_VEC); return *_vtOpt._pvec; }
+	const std::vector<CVariantElem>& GetVector() const { assert(_opType == _VT_VEC); return *_vtOpt._pvec; }
 
 	template<typename T>
 	std::vector<T> GetVectorWithType() const
@@ -274,9 +274,9 @@ public:
 		vecTmp.resize(vecSize);
 		for (int i = 0; i < vecSize; i++)
 		{
-			// Vector can be implicetly converted to the vector of something that COptionElem object could be implicitly converted.
-			// When we want to return vector of ENUM, the there is no direct way to convert vector<COptionElem> into vector<ENUM>.
-			// rather vector<COptionElem> -> vector<enum> -> vector<ENUM>.
+			// Vector can be implicetly converted to the vector of something that CVariantElem object could be implicitly converted.
+			// When we want to return vector of ENUM, the there is no direct way to convert vector<CVariantElem> into vector<ENUM>.
+			// rather vector<CVariantElem> -> vector<enum> -> vector<ENUM>.
 			vecTmp[i] = _vtOpt._pvec->operator[](i);
 		}
 		return vecTmp;
@@ -289,11 +289,11 @@ public:
 	// --- Map Type ---
 	// Ctors
 
-	COptionElem(const COptMap& rhs);
-	COptionElem(COptMap&& rhs);
+	CVariantElem(const COptMap& rhs);
+	CVariantElem(COptMap&& rhs);
 
 	template<typename T>
-	COptionElem(const std::map<std::string, T>& rhs);
+	CVariantElem(const std::map<std::string, T>& rhs);
 
 
 	// Converter
@@ -304,11 +304,11 @@ public:
 
 	// Assingment
 
-	COptionElem& operator=(const COptMap& rhs);
-	COptionElem& operator=(COptMap&& rhs);
+	CVariantElem& operator=(const COptMap& rhs);
+	CVariantElem& operator=(COptMap&& rhs);
 
 	template<typename T>
-	COptionElem& operator=(const std::map<std::string, T>& rhs);
+	CVariantElem& operator=(const std::map<std::string, T>& rhs);
 
 	//Setter
 	void SetMap(const COptMap& rhs);
@@ -327,24 +327,24 @@ public:
 
 		// for map
 
-	COptionElem& at(const std::string& keyval);
-	const COptionElem& at(const std::string& keyval) const;
+	CVariantElem& at(const std::string& keyval);
+	const CVariantElem& at(const std::string& keyval) const;
 
-	COptionElem& operator[] (const std::string& keyval);
-	const COptionElem& operator[] (const std::string& keyval) const;
+	CVariantElem& operator[] (const std::string& keyval);
+	const CVariantElem& operator[] (const std::string& keyval) const;
 
 
-	COptionElem& operator[] (const char* keyval) { return this->operator[](std::string(keyval)); }
-	const COptionElem& operator[] (const char* keyval) const { return this->operator[](std::string(keyval)); }
+	CVariantElem& operator[] (const char* keyval) { return this->operator[](std::string(keyval)); }
+	const CVariantElem& operator[] (const char* keyval) const { return this->operator[](std::string(keyval)); }
 
 
 
 // 	// for vector
-// 	COptionElem& at(size_t idx);
-// 	const COptionElem& at(size_t idx) const;
+// 	CVariantElem& at(size_t idx);
+// 	const CVariantElem& at(size_t idx) const;
 // 
-// 	COptionElem& operator[] (size_t idx);
-// 	const COptionElem& operator[] (size_t idx) const;
+// 	CVariantElem& operator[] (size_t idx);
+// 	const CVariantElem& operator[] (size_t idx) const;
 
 
 
@@ -352,7 +352,7 @@ private:
 
 
 
-	void CopyNonMoves(const COptionElem& rhs);
+	void CopyNonMoves(const CVariantElem& rhs);
 
 	void deleteDynMemoryIfExist();
 
@@ -373,7 +373,7 @@ private:
 		OpElem(Btype b) : _b(b) {}
 
 		OpElem(std::string* rhspstr) : _pstr(rhspstr) {}
-		OpElem(std::vector<COptionElem>* rhspvec) : _pvec(rhspvec) {}
+		OpElem(std::vector<CVariantElem>* rhspvec) : _pvec(rhspvec) {}
 		OpElem(COptMap* rhspmap) : _pmap(rhspmap) {}
 
 
@@ -387,25 +387,25 @@ private:
 		Btype _b;
 
 		std::string* _pstr;
-		std::vector<COptionElem>* _pvec;
+		std::vector<CVariantElem>* _pvec;
 		COptMap* _pmap;
 		
 	} _vtOpt;
 
-	friend std::ostream & operator<<(std::ostream& os, const COptionElem& Opt);
+	friend std::ostream & operator<<(std::ostream& os, const CVariantElem& Opt);
 };
 
 template<typename T>
-inline COptionElem::COptionElem(const std::map<std::string, T> & rhs) { SetMap<T>(rhs);  }
+inline CVariantElem::CVariantElem(const std::map<std::string, T> & rhs) { SetMap<T>(rhs);  }
 
 // template<typename T>
-// COptionElem::operator std::map<std::string, T>() const { return GetMapWithType<T>(); }
+// CVariantElem::operator std::map<std::string, T>() const { return GetMapWithType<T>(); }
 
 template<typename T>
-COptionElem& COptionElem::operator=(const std::map<std::string, T> & rhs) { SetMap<T>(rhs); return *this; }
+CVariantElem& CVariantElem::operator=(const std::map<std::string, T> & rhs) { SetMap<T>(rhs); return *this; }
 
 template <typename T>
-void COptionElem::SetMap(const std::map<std::string, T>& rhs)
+void CVariantElem::SetMap(const std::map<std::string, T>& rhs)
 {
 	deleteDynMemoryIfExist();
 	_opType = _VT_MAP;
@@ -413,7 +413,7 @@ void COptionElem::SetMap(const std::map<std::string, T>& rhs)
 }
  
 // template<typename T>
-// std::map<std::string, T> COptionElem::GetMapWithType() const
+// std::map<std::string, T> CVariantElem::GetMapWithType() const
 // {
 // 	assert(_opType == _VT_MAP);
 // 	std::map<std::string, T> mapTmp;
@@ -423,7 +423,7 @@ void COptionElem::SetMap(const std::map<std::string, T>& rhs)
 // 
 // 	for (; it != itEnd; ++it)
 // 	{
-// 		// OptMap can be implicetly converted to the map with value type that COptionElem object could be implicitly converted.
+// 		// OptMap can be implicetly converted to the map with value type that CVariantElem object could be implicitly converted.
 // 		// When we want to return map with value type of ENUM, there is no direct way to convert OptMap into std::map<std::string, ENUM>.
 // 		// rather OptMap -> std::map<std::string, int> -> std::map<std::string, ENUM>.
 // 		
@@ -434,5 +434,5 @@ void COptionElem::SetMap(const std::map<std::string, T>& rhs)
 // 	return mapTmp;
 // }
 
-std::ostream& operator<<(std::ostream& os, const COptionElem& Opt);
+std::ostream& operator<<(std::ostream& os, const CVariantElem& Opt);
 

@@ -131,12 +131,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="OptionElementTest.cpp" />
     <ClCompile Include="TestMain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="OptionElementTestCases.h" />
-    <ClInclude Include="OptionElementTestSuite.h" />
+    <ClInclude Include="VariantElementTestCases.h" />
+    <ClInclude Include="VariantElementTestSuite.h" />
     <ClInclude Include="TestUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -18,7 +18,7 @@
     <ClCompile Include="OptionMap.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="OptionElement.cpp">
+    <ClCompile Include="VariantElement.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -26,13 +26,13 @@
     <ClInclude Include="OptionMap.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="OptionElement.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="OptionTypes.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OptionUtilFns.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="VariantElement.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

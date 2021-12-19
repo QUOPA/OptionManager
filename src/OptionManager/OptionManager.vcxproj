@@ -128,11 +128,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="OptionMap.cpp" />
-    <ClCompile Include="OptionElement.cpp" />
+    <ClCompile Include="VariantElement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OptionMap.h" />
-    <ClInclude Include="OptionElement.h" />
+    <ClInclude Include="VariantElement.h" />
     <ClInclude Include="OptionTypes.h" />
     <ClInclude Include="OptionUtilFns.h" />
   </ItemGroup>

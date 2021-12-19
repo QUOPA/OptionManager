@@ -1,6 +1,6 @@
 #pragma once
 
-#include "OptionManager/OptionElement.h"
+#include "OptionManager/VariantElement.h"
 #include "OptionManager/OptionUtilFns.h"
 #include <iostream>
 #include <vector>
@@ -15,10 +15,10 @@ namespace OptElemTest
 
 void UndefinedTypeTest()
 {
-	COptionElem Opt;
+	CVariantElem Opt;
 	std::cout << Opt.typestr() << std::endl;
 
-	COptionElem Opt2 = Opt;
+	CVariantElem Opt2 = Opt;
 	std::cout << Opt2.typestr() << std::endl;
 
 }
@@ -26,7 +26,7 @@ void UndefinedTypeTest()
 void IntTypeTest()
 {
 	int a = 3;
-	COptionElem Opt(a);
+	CVariantElem Opt(a);
 	std::cout << Opt << std::endl;
 	Opt = a;
 	std::cout << Opt << std::endl;
@@ -38,7 +38,7 @@ void IntTypeTest()
 void UIntTypeTest()
 {
 	unsigned int a = 3;
-	COptionElem Opt(a);
+	CVariantElem Opt(a);
 	std::cout << Opt << std::endl;
 	Opt = a;
 	std::cout << Opt << std::endl;
@@ -50,7 +50,7 @@ void UIntTypeTest()
 void CharTypeTest()
 {
 	char a = 'a';
-	COptionElem Opt(a);
+	CVariantElem Opt(a);
 	std::cout << Opt << std::endl;
 	Opt = a;
 	std::cout << Opt << std::endl;
@@ -63,7 +63,7 @@ void CharTypeTest()
 void UCharTypeTest()
 {
 	unsigned char a = 'a';
-	COptionElem Opt(a);
+	CVariantElem Opt(a);
 	std::cout << Opt << std::endl;
 	Opt = a;
 	std::cout << Opt << std::endl;
@@ -75,7 +75,7 @@ void UCharTypeTest()
 void FloatTypeTest()
 {
 	double a = 3.14;
-	COptionElem Opt(a);
+	CVariantElem Opt(a);
 	std::cout << Opt << std::endl;
 	Opt = a;
 	std::cout << Opt << std::endl;
@@ -87,7 +87,7 @@ void FloatTypeTest()
 void BoolTypeTest()
 {
 	bool a = true;
-	COptionElem Opt(a);
+	CVariantElem Opt(a);
 	std::cout << Opt << std::endl;
 	Opt = a;
 	std::cout << Opt << std::endl;
@@ -100,7 +100,7 @@ void BoolTypeTest()
 void StringTypeTest()
 {
 	std::string a = "abcabc";
-	COptionElem Opt(a);
+	CVariantElem Opt(a);
 	std::cout << Opt << std::endl;
 	Opt = a;
 	std::cout << Opt << std::endl;
@@ -115,7 +115,7 @@ void StringTypeTest()
 void VectorTypeTest()
 {
 	std::vector<int> tmpvec(10, 3);
-	COptionElem Opt(tmpvec);
+	CVariantElem Opt(tmpvec);
 	std::cout << Opt << std::endl;
 	Opt.GetVector()[1] = 1.4;
 	std::cout << Opt << std::endl;
@@ -129,7 +129,7 @@ void VectorTypeTest()
 void MapTypeTest()
 {
 	std::map<std::string, int> tmpmap ={ {"abc", 1}, {"def", 2} };
-	COptionElem Opt(tmpmap);
+	CVariantElem Opt(tmpmap);
 	std::cout << Opt << std::endl;
 	Opt["a"] = 1.3;
 	Opt["added2"] = 1.3;

@@ -16,8 +16,8 @@ A["Name"] = std::move(TmpVec);      //insert vector value
 The map-like COptMap class also have the value type of COptMap itself. This feature enables the COptMap can have hierarchical structure.
 ```cpp 
 // example code   
-COptMap NetOpt;                    // the top of hierarchy, here it contains all values of Neural Network  
-COptMap tmpOptimOpt;                // Option map about optimizer
+COptMap NetOpt;                 // the top of hierarchy, here, all values of Neural Network.
+COptMap tmpOptimOpt;            // Option map about optimizer
 tmpOptimOpt["method"] = "adam";
 tmpOptimOpt["learningrate"] = 0.001;
 tmpOptimOpt["beta1"] = 0.9;
@@ -59,7 +59,6 @@ std::vector<COptMap> tmpLayerOpt = NetOpt["layer"]    // Option map about layers
 ```
 ## Features
 - Save & retrive various typed data with one map object
-- Only requires C++11 (not C++17 for std::varient)
 - Provides python-like interface (an element has run-time type)
 - Being saved & being retrived data should have the same type (o/w throw exception)
 - STL Container Compatible
@@ -67,13 +66,14 @@ std::vector<COptMap> tmpLayerOpt = NetOpt["layer"]    // Option map about layers
 
 ## Install
 - Download .h, .cpp files and include OptMap.h
+- C++ Version : C++11 or above
 
 ## Implementation
 The variant type class is made to include all option types, offenly used, such as fundamental types like char, unsigned char, int, ... and STL classes, namely std::string, std::map, std::vector. Saving STL class-type option values, we can more set option values diversely.
 - Fundumental types and pointer to STL types are defined together as C++ UNION in the varient type element class.
 - Classes heavely employ converting constructors and converting operator().
 
-## Working on...
+## Further works
 - Writting enough test cases
 - Performance improvement 
 - Serialize, Import from & Export to a format (JSON, XML, etc...)
